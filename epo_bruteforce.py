@@ -19,6 +19,8 @@ import torch.nn.functional as F
 import transformers
 from datasets import load_dataset
 
+MODEL_NAME = "meta-llama/Llama-3.1-8B-Instruct"
+
 
 def cat_if_not_none(a, b):
     if a is None or b is None:
@@ -822,12 +824,10 @@ class EPOJob(Checkpointable):
             json.dump({"idx": idx, "outputs": outputs, "xentropies": xentropies}, f)
 
     def __call__(self):
-        tokenizer = transformers.AutoTokenizer.from_pretrained(
-            "meta-llama/Llama-3.1-8B-Instruct"
-        )
+        tokenizer = transformers.AutoTokenizer.from_pretrained(MODEL_NAME)
 
         model = transformers.AutoModelForCausalLM.from_pretrained(
-            "meta-llama/Llama-3.1-8B-Instruct",
+            MODEL_NAME,
             torch_dtype="bfloat16",
             device_map="auto",
         )
