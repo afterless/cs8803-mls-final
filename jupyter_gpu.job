@@ -1,0 +1,25 @@
+#!/bin/bash
+#SBATCH -p coe-gpu
+#SBATCH --time=08:00:00
+#SBATCH --gres=gpu:H200:1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=16
+#SBATCH --mem-per-cpu=8G
+#SBATCH --job-name=jupyter-notebook
+#SBATCH -o /home/hice1/apanda38/scratch/jupyter_log/jupyter-notebook-%J.log
+#SBATCH -e /home/hice1/apanda38/scratch/jupyter_log/jupyter-notebook-%J.log
+
+module load cuda
+
+source ~/cs8803/final/.venv/bin/activate
+
+port=8888
+
+jupyter-notebook \
+  --no-browser \
+  --port=${port} \
+  --ip="*" \
+  --NotebookApp.token='' \
+  --NotebookApp.password='' \
+  --NotebookApp.disable_check_xsrf=True
+
